@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script type="text/javascript">
+        var network = {
+            blockchain: "chainx",
+            chainId: "ChainX"
+        };
+        var useIdentity = null;
+        // identity = {
+        //     account: "5STdEC3NfF2C3Z5NG2EzkFePYB2x1k3Ld8kcRAtLZL8aipMW",
+        //     blockchain: "chainx",
+        //     chainId: "ChainX"
+        // }
+
+        function login() {
+            mathExtension.getIdentity(network).then(identity => {
+                console.log(identity);
+                document.getElementById("loginDiv").innerHTML = JSON.stringify(identity);
+                useIdentity = identity;
+            }).catch(e => {
+                console.log(e);
+            })
+        }
+        function logout() {
+            mathExtension.forgetIdentity().then(response => {
+                console.log(response);
+            }).catch(e => {
+                console.log(e);
+            })
+        }
+        function signTransaction() {
+          if(!useIdentity){
+            document.getElementById("signatureDiv").innerHTML = "Login Frist";
+            return;
+          }
+          // 转账
+          var transaction = {
+              from: useIdentity.account,
+              type: "transfer",
+              acceleration:1,
+              msg: { 
+                to: "5S2Mxkjx9LW1p41kHFn2LGPYmbdPiRk9BBnvfDmLkQyyrrRX",
+                token: "PCX",
+                amount: 10000,
+                memo: "",
+              }
+          };
+          // 提现
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "withdraw",
+          //     acceleration:1,
+          //     msg: { 
+          //       token: "BTC",
+          //       value: 10000,
+          //       addr: "5S2Mxkjx9LW1p41kHFn2LGPYmbdPiRk9BBnvfDmLkQyyrrRX",
+          //       ext: "",
+          //     }
+          // };
+          // 用户挂单
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "putOrder",
+          //     acceleration:1,
+          //     msg: { 
+          //       pair_id: 1,
+          //       order_type: "Linit",
+          //       direction: "Buy",
+          //       amount: 100,
+          //       price: 100
+          //     }
+          // };
+          // 取消挂单
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "cancelOrder",
+          //     acceleration:1,
+          //     msg: { 
+          //       pair_id: 1,
+          //       index: 2 
+          //     }
+          // };
+          // 注册节点
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "register",
+          //     acceleration:1,
+          //     msg: { 
+          //       name: "节点"
+          //     }
+          // };
+          // 对节点投票
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "nominate",
+          //     acceleration:1,
+          //     msg: { 
+          //       target_address: "5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ",
+          //       value: 1000,
+          //       memo:"投票" 
+          //     }
+          // };
+          // 取消对节点投票
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "unnominate",
+          //     acceleration:1,
+          //     msg: { 
+          //       target_address: "5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ",
+          //       value: 1000,
+          //       memo:"撤销投票" 
+          //     }
+          // };
+          // 切换节点投票
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "renominate",
+          //     acceleration:1,
+          //     msg: { 
+          //       from: "5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ",
+          //       to: "5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ",
+          //       value: 1000,
+          //       memo:"切换投票" 
+          //     }
+          // };
+          // 更新节点网址，参选状态，出块地址和关于
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "refresh",
+          //     acceleration:1,
+          //     msg: { 
+          //       url: null,
+          //       desire_to_run: true,
+          //       next_key: null,
+          //       about:"我是节点"
+          //     }
+          // };
+          // 选举投票提息
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "voteClaim",
+          //     acceleration:1,
+          //     msg: { 
+          //       target: '5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ'
+          //     }
+          // };
+          // 充值挖矿提息
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "depositClaim",
+          //     acceleration:1,
+          //     msg: { 
+          //       token: 'BTC'
+          //     }
+          // };
+          // 解冻(撤销投票后，撤销金额有一定的时候锁定期。锁定期满后，可以对锁定金额进行解冻，使其变为可用余额)
+          // var transaction = {
+          //     from: useIdentity.account,
+          //     type: "unfreeze",
+          //     acceleration:1,
+          //     msg: { 
+          //       target: '5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ',
+          //       revocation_index:1
+          //     }
+          // };
+          // 请求插件签名
+          mathExtension.requestSignature(transaction, network).then(signedTransaction => {
+              console.log(signedTransaction);
+              document.getElementById("signatureDiv").innerHTML = signedTransaction;
+          }).catch(e => {
+              console.log(e);
+          })
+        }
+    </script>
+</head>
+
+<body>
+    <div id="loginDiv"></div></br>
+    <button type="button" onclick="login()">Login</button></br></br>
+    <button type="button" onclick="logout()">Logout</button></br>
+    <div id="signatureDiv"></div></br>
+    <button type="button" onclick="signTransaction()">Sign Transaction</button>
+</body>
+
+</html>
