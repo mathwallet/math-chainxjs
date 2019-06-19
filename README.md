@@ -2,6 +2,8 @@
 
 ## Using Math Wallet ChainX JS API
 
+目前支持的操作：转账、提现、挂单、取消挂单、注册节点、节点投票、撤销节点投票、切换节点投票、更新节点信息、选举投票提息、充值挖矿提息、锁定解冻
+
 For details, please find the sample in this repo.
 
 
