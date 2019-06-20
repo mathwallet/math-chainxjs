@@ -169,9 +169,9 @@
           //     }
           // };
           // 请求插件签名
-          mathExtension.requestSignature(transaction, network).then(signedTransaction => {
-              console.log(signedTransaction);
-              document.getElementById("signatureDiv").innerHTML = signedTransaction;
+          mathExtension.requestSignature(transaction, network).then(result => {
+              console.log(JSON.stringify(result));
+              document.getElementById("signatureDiv").innerHTML = JSON.stringify(signedTransaction);
           }).catch(e => {
               console.log(e);
           })
