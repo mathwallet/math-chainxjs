@@ -170,8 +170,7 @@
           // };
           // 请求插件签名
           mathExtension.requestSignature(transaction, network).then(result => {
-              console.log(JSON.stringify(result));
-              document.getElementById("signatureDiv").innerHTML = JSON.stringify(signedTransaction);
+              document.getElementById("signatureDiv").innerHTML = JSON.stringify(result.tx); 
           }).catch(e => {
               console.log(e);
           })
