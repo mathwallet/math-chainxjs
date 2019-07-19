@@ -6,9 +6,6 @@
 
 For details, please find the sample in this repo.
 
-### Download Chrome Extension
-https://github.com/mathwallet/math-chainxjs/blob/master/mathwalletplus-v1.0.6.zip
-
 ### Download Math Wallet 麦子钱包下载
 
 [http://mathwallet.org](http://mathwallet.org)

@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ChainX Vote</title>
+    <meta id="i18n_pagename" content="message">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://static.medishares.net/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://static.medishares.net/css/common.css?v=2018082901">
+    <script src="https://static.medishares.net/js/jquery-3.2.1.min.js"></script>
+    <script src="https://static.medishares.net/js/vue.min.js"></script>
+    <script src="https://static.medishares.net/js/common.js?v=2018082901"></script>
+</head>
+<body>
+<div class="mds-group">
+    <link href="https://static.medishares.net/css/market/qixi2018.css" rel="stylesheet">
+<div class="qixi">
+  <div class="card" style="text-align:center">
+
+  <ul class="qixi-about" style="color:#333;text-align:left">
+    <li>
+      <h3>01号提案：《加强节点自抵押限制提案》</h3>
+      <p>
+本提案提议节点最多只能接受 10 倍于自抵押的总得票。即当用户对某节点投票时，如果投票后节点的总得票数大于该节点自抵押的10倍，则该投票动作失败，需等待节点增加自抵押扩大该节点的用户投票上限。<br>
+如：A节点当前的自抵押票数为1000PCX，得票总数为9000PCX(包含用户投票为8000PCX)，此时A节点最多可再接受用户投1000PCX，若B用户试图投票给A节点1200PCX，则投票失败。<br><br>
+提案目的：<br>
+1.将节点运营方的利益和该节点的收益捆绑，为日后更加严格的双签等作恶惩罚机制奠定基础。<br>
+2.增强社区用户对节点的信心，促进ChainX生态的可持续发展。<br><br>
+公投结束时间<br>
+块高2640000 (预计时间 2019-07-26 12:23:29 )
+      </p>
+    </li>
+  </ul>
+
+    <button type="button" onclick="signAgree()" class="confirm" style="display: inline-block;width: 45%;background-color:green">赞成</button>
+    &nbsp;&nbsp;
+    <a href="javascript:;" class="confirm" style="display: inline-block;width: 45%;background-color:red" onclick="signDisagree()">反对</a>
+  </div>
+  <div style="clear: both;"></div>
+</div>
+
+    <script type="text/javascript">
+
+window.onload=function(){
+
+          login();
+
+}
+
+          var network = {
+              blockchain: "chainx",
+              chainId: "ChainX"
+          };
+          var useIdentity = null;
+
+        function login() {
+            mathExtension.getIdentity(network).then(identity => {
+                console.log(identity);
+                useIdentity = identity;
+            }).catch(e => {
+                console.log(e);
+            })
+        }
+        function logout() {
+            mathExtension.forgetIdentity().then(response => {
+                console.log(response);
+            }).catch(e => {
+                console.log(e);
+            })
+        }
+
+        function signAgree() {
+          // 转账
+          var transaction = {
+              from: useIdentity.account,
+              type: "transfer",
+              acceleration:1,
+              msg: {
+                to: "5To1YSixestjwi3kQYJbZkMJdfuJm4rRqRDcmbF4rJaajDyL",
+                token: "PCX",
+                amount: 0,
+                memo: "",
+              }
+          };
+          // 请求插件签名
+          mathExtension.requestSignature(transaction, network).then(result => {
+              return mathExtension.httpProvider("https://w1.chainx.org/rpc").post("",{
+                  id: 1,
+                  jsonrpc: '2.0',
+                  method: 'author_submitExtrinsic',
+                  params: [result.tx]
+              },null)
+            }).then(res=>{
+              console.log(res);
+              if(res.result.error){
+                alert('fail');
+              }else{
+                alert('success');
+                window.location.href="./index.html";
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+        }
+
+        function signDisagree() {
+          // 转账
+          var transaction = {
+              from: useIdentity.account,
+              type: "transfer",
+              acceleration:1,
+              msg: {
+                to: "5To1NdLPeosaVqfEAP1G8weFxT7XHaHd3DCn154Gs8LcAJ6H",
+                token: "PCX",
+                amount: 0,
+                memo: "",
+              }
+          };
+          // 请求插件签名
+          mathExtension.requestSignature(transaction, network).then(result => {
+              return mathExtension.httpProvider("https://w1.chainx.org/rpc").post("",{
+                  id: 1,
+                  jsonrpc: '2.0',
+                  method: 'author_submitExtrinsic',
+                  params: [result.tx]
+              },null)
+            }).then(res=>{
+              console.log(res);
+              if(res.result.error){
+                alert('fail');
+              }else{
+                alert('success');
+                window.location.href="./index.html";
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+        }
+    </script>
+
+</div>
+</body>
+</html>

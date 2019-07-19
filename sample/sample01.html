@@ -43,7 +43,7 @@
               from: useIdentity.account,
               type: "transfer",
               acceleration:1,
-              msg: { 
+              msg: {
                 to: "5S2Mxkjx9LW1p41kHFn2LGPYmbdPiRk9BBnvfDmLkQyyrrRX",
                 token: "PCX",
                 amount: 10000,
@@ -55,7 +55,7 @@
           //     from: useIdentity.account,
           //     type: "withdraw",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       token: "BTC",
           //       value: 10000,
           //       addr: "5S2Mxkjx9LW1p41kHFn2LGPYmbdPiRk9BBnvfDmLkQyyrrRX",
@@ -67,7 +67,7 @@
           //     from: useIdentity.account,
           //     type: "putOrder",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       pair_id: 1,
           //       order_type: "Linit",
           //       direction: "Buy",
@@ -80,9 +80,9 @@
           //     from: useIdentity.account,
           //     type: "cancelOrder",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       pair_id: 1,
-          //       index: 2 
+          //       index: 2
           //     }
           // };
           // 注册节点
@@ -90,7 +90,7 @@
           //     from: useIdentity.account,
           //     type: "register",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       name: "节点"
           //     }
           // };
@@ -99,10 +99,10 @@
           //     from: useIdentity.account,
           //     type: "nominate",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       target_address: "5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ",
           //       value: 1000,
-          //       memo:"投票" 
+          //       memo:"投票"
           //     }
           // };
           // 取消对节点投票
@@ -110,10 +110,10 @@
           //     from: useIdentity.account,
           //     type: "unnominate",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       target_address: "5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ",
           //       value: 1000,
-          //       memo:"撤销投票" 
+          //       memo:"撤销投票"
           //     }
           // };
           // 切换节点投票
@@ -121,11 +121,11 @@
           //     from: useIdentity.account,
           //     type: "renominate",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       from: "5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ",
           //       to: "5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ",
           //       value: 1000,
-          //       memo:"切换投票" 
+          //       memo:"切换投票"
           //     }
           // };
           // 更新节点网址，参选状态，出块地址和关于
@@ -133,7 +133,7 @@
           //     from: useIdentity.account,
           //     type: "refresh",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       url: null,
           //       desire_to_run: true,
           //       next_key: null,
@@ -145,7 +145,7 @@
           //     from: useIdentity.account,
           //     type: "voteClaim",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       target: '5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ'
           //     }
           // };
@@ -154,7 +154,7 @@
           //     from: useIdentity.account,
           //     type: "depositClaim",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       token: 'BTC'
           //     }
           // };
@@ -163,20 +163,32 @@
           //     from: useIdentity.account,
           //     type: "unfreeze",
           //     acceleration:1,
-          //     msg: { 
+          //     msg: {
           //       target: '5FxL27izsvhViiQtgwBm6kP8XvMSZ3JjyoMCmaw7pGrgXqqJ',
           //       revocation_index:1
           //     }
           // };
-          // 请求插件签名
+          // 请求插件签名 & 广播签名交易
+          // 广播签名交易使用 RPC 文档（https://github.com/chainx-org/ChainX/wiki/RPC）中 author_submitExtrinsic方法
           mathExtension.requestSignature(transaction, network).then(result => {
-              document.getElementById("signatureDiv").innerHTML = JSON.stringify(result.tx); 
-          }).catch(e => {
-              console.log(e);
-          })
-           
-          // 广播签名交易
-          // 使用 RPC 文档（https://github.com/chainx-org/ChainX/wiki/RPC）中 author_submitExtrinsic方法
+            return mathExtension.httpProvider("https://w1.chainx.org/rpc").post("",{
+                id: 1,
+                jsonrpc: '2.0',
+                method: 'author_submitExtrinsic',
+                params: [result.tx]
+            },null)
+          }).then(res=>{
+            console.log(res);
+            if(res.result.error){
+              alert('fail');
+            }else{
+              alert('success');
+              window.location.href="./";
+            }
+          }).catch(error => {
+            console.log(error);
+          });
+
         }
     </script>
 </head>
