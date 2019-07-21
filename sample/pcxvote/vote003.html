@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ChainX Vote</title>
+    <meta id="i18n_pagename" content="message">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://static.medishares.net/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://static.medishares.net/css/common.css?v=2018082901">
+    <script src="https://static.medishares.net/js/jquery-3.2.1.min.js"></script>
+    <script src="https://static.medishares.net/js/vue.min.js"></script>
+    <script src="https://static.medishares.net/js/common.js?v=2018082901"></script>
+</head>
+<body>
+<div class="mds-group">
+    <link href="https://static.medishares.net/css/market/qixi2018.css" rel="stylesheet">
+<div class="qixi">
+  <div class="card" style="text-align:center">
+
+  <ul class="qixi-about" style="color:#333;text-align:left">
+    <li>
+      <h3>03号提案：《支出议会基金上币MXC抹茶交易所》</h3>
+      <p>
+节点Nodeasy.com发起提案：议会基金支出2000个PCX，用于MXC抹茶交易所上币，目前议会基金总量为3000个PCX左右。其中1000PCX为技术对接服务费，另外1000PCX为活动奖励经费。同时需要在48小时内，超过2000个账户完成在抹茶交易所的PCX充值操作，可以从ChainX链发起向抹茶系统充值，或抹茶账户之间转账。 如果议案通过后，双方会进行技术对接，并商定具体的充值上币时间段，具体交易开放时间，具体活动奖励细则。<br><br>
+
+公投结束时间<br>
+块高2520000(预计时间 2019-07-23 17:56:51 )
+      </p>
+    </li>
+  </ul>
+
+    <button type="button" onclick="signAgree()" class="confirm" style="display: inline-block;width: 45%;background-color:green">赞成</button>
+    &nbsp;&nbsp;
+    <a href="javascript:;" class="confirm" style="display: inline-block;width: 45%;background-color:red" onclick="signDisagree()">反对</a>
+  </div>
+  <div style="clear: both;"></div>
+</div>
+
+    <script type="text/javascript">
+
+window.onload=function(){
+
+          login();
+
+}
+
+          var network = {
+              blockchain: "chainx",
+              chainId: "ChainX"
+          };
+          var useIdentity = null;
+
+        function login() {
+            mathExtension.getIdentity(network).then(identity => {
+                console.log(identity);
+                useIdentity = identity;
+            }).catch(e => {
+                console.log(e);
+            })
+        }
+        function logout() {
+            mathExtension.forgetIdentity().then(response => {
+                console.log(response);
+            }).catch(e => {
+                console.log(e);
+            })
+        }
+
+        function signAgree() {
+          // 转账
+          var transaction = {
+              from: useIdentity.account,
+              type: "transfer",
+              acceleration:1,
+              msg: {
+                to: "5To3YdgVyz33ia15R4T8ktv41GkaeQU6qPdv4BxP6VeFLx5S",
+                token: "PCX",
+                amount: 0,
+                memo: "",
+              }
+          };
+          // 请求插件签名
+          mathExtension.requestSignature(transaction, network).then(result => {
+              return mathExtension.httpProvider("https://w1.chainx.org/rpc").post("",{
+                  id: 1,
+                  jsonrpc: '2.0',
+                  method: 'author_submitExtrinsic',
+                  params: [result.tx]
+              },null)
+            }).then(res=>{
+              console.log(res);
+              if(res.result.error){
+                alert('fail');
+              }else{
+                alert('success');
+                window.location.href="./index.html";
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+        }
+
+        function signDisagree() {
+          // 转账
+          var transaction = {
+              from: useIdentity.account,
+              type: "transfer",
+              acceleration:1,
+              msg: {
+                to: "5To3NcHVhHtRxMptq8eGRVRLXSBK6xG6aCd2J2UbHkHFEwTc",
+                token: "PCX",
+                amount: 0,
+                memo: "",
+              }
+          };
+          // 请求插件签名
+          mathExtension.requestSignature(transaction, network).then(result => {
+              return mathExtension.httpProvider("https://w1.chainx.org/rpc").post("",{
+                  id: 1,
+                  jsonrpc: '2.0',
+                  method: 'author_submitExtrinsic',
+                  params: [result.tx]
+              },null)
+            }).then(res=>{
+              console.log(res);
+              if(res.result.error){
+                alert('fail');
+              }else{
+                alert('success');
+                window.location.href="./index.html";
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+        }
+    </script>
+
+</div>
+</body>
+</html>
