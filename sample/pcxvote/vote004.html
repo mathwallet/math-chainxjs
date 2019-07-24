@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ChainX Vote</title>
+    <meta id="i18n_pagename" content="message">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://static.medishares.net/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://static.medishares.net/css/common.css?v=2018082901">
+    <script src="https://static.medishares.net/js/jquery-3.2.1.min.js"></script>
+    <script src="https://static.medishares.net/js/vue.min.js"></script>
+    <script src="https://static.medishares.net/js/common.js?v=2018082901"></script>
+</head>
+<body>
+<div class="mds-group">
+    <link href="https://static.medishares.net/css/market/qixi2018.css" rel="stylesheet">
+<div class="qixi">
+  <div class="card" style="text-align:center">
+
+  <ul class="qixi-about" style="color:#333;text-align:left">
+    <li>
+      <h3>04号提案：支出议会基金支持BigONE推动ChainX生态发展</h3>
+      <p>
+节点Jinma发起提案：议会基金支出1000PCX，用于BigONE对ChainX 生态的推动和发展。BigONE交易平台已经做好技术对接，1000PCX将全部用于活动奖励经费，奖励给本周五参与BigONE社区投票活动的用户。如果提案通过，BigONE将会在此活动结束后，拨出预算进行下一步的市场营销活动。具体活动奖励细则，以 BigONE 官方公告为准。<br><br>
+
+公投结束时间<br>
+块高2610000(预计时间 2019-07-25 20:02:48)
+      </p>
+    </li>
+  </ul>
+
+    <button type="button" onclick="signAgree()" class="confirm" style="display: inline-block;width: 45%;background-color:green">赞成</button>
+    &nbsp;&nbsp;
+    <a href="javascript:;" class="confirm" style="display: inline-block;width: 45%;background-color:red" onclick="signDisagree()">反对</a>
+  </div>
+  <div style="clear: both;"></div>
+</div>
+
+    <script type="text/javascript">
+
+window.onload=function(){
+
+          login();
+
+}
+
+          var network = {
+              blockchain: "chainx",
+              chainId: "ChainX"
+          };
+          var useIdentity = null;
+
+        function login() {
+            mathExtension.getIdentity(network).then(identity => {
+                console.log(identity);
+                useIdentity = identity;
+            }).catch(e => {
+                console.log(e);
+            })
+        }
+        function logout() {
+            mathExtension.forgetIdentity().then(response => {
+                console.log(response);
+            }).catch(e => {
+                console.log(e);
+            })
+        }
+
+        function signAgree() {
+          // 转账
+          var transaction = {
+              from: useIdentity.account,
+              type: "transfer",
+              acceleration:1,
+              msg: {
+                to: "5To4Yba4xUSXdZ7huNRoWxKE2hhyzzmRV3tk83hBwyByt1th",
+                token: "PCX",
+                amount: 0,
+                memo: "",
+              }
+          };
+          // 请求插件签名
+          mathExtension.requestSignature(transaction, network).then(result => {
+              return mathExtension.httpProvider("https://w1.chainx.org/rpc").post("",{
+                  id: 1,
+                  jsonrpc: '2.0',
+                  method: 'author_submitExtrinsic',
+                  params: [result.tx]
+              },null)
+            }).then(res=>{
+              console.log(res);
+              if(res.result.error){
+                alert('fail');
+              }else{
+                alert('success');
+                window.location.href="./index.html";
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+        }
+
+        function signDisagree() {
+          // 转账
+          var transaction = {
+              from: useIdentity.account,
+              type: "transfer",
+              acceleration:1,
+              msg: {
+                to: "5To4NBCQgkLYzAQ1VzHMpiYm8NV6no12KffW1qSqhdiptNqj",
+                token: "PCX",
+                amount: 0,
+                memo: "",
+              }
+          };
+          // 请求插件签名
+          mathExtension.requestSignature(transaction, network).then(result => {
+              return mathExtension.httpProvider("https://w1.chainx.org/rpc").post("",{
+                  id: 1,
+                  jsonrpc: '2.0',
+                  method: 'author_submitExtrinsic',
+                  params: [result.tx]
+              },null)
+            }).then(res=>{
+              console.log(res);
+              if(res.result.error){
+                alert('fail');
+              }else{
+                alert('success');
+                window.location.href="./index.html";
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+        }
+    </script>
+
+</div>
+</body>
+</html>
